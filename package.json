@@ -1,0 +1,26 @@
+{
+  "name": "gamedle",
+  "version": "1.0.0",
+  "description": "Do you know Wordle ? We've done the same thing for Board Games",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Adri-dou/Gamedle.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Adri-dou/Gamedle/issues"
+  },
+  "homepage": "https://github.com/Adri-dou/Gamedle#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "mysql2": "^3.14.0"
+  }
+}
