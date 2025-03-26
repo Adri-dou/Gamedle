@@ -15,12 +15,11 @@ cd Gamedle
 ### 2️. Installer les dépendances
 #### Backend (Node.js + Express + MySQL)
 ```sh
-cd backend
 npm install
 ```
 #### Frontend (Vue.js)
 ```sh
-cd ../frontend
+cd frontend
 npm install
 ```
 
