@@ -134,3 +134,9 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+
+# too big datasets
+dataset/details.csv
+dataset/ratings.csv
+dataset/insertion-file.sql

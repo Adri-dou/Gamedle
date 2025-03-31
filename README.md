@@ -8,29 +8,36 @@ Bienvenue sur le projet **Gamedle**, un jeu en ligne inspiré de Wordle ou LoLdl
 
 ### 1. Cloner le repo
 ```sh
-git clone https://github.com/votre-utilisateur/boardgame-loldle.git
+git clone https://github.com/Adri-dou/Gamedle.git
 cd Gamedle
 ```
 
 ### 2️. Installer les dépendances
 #### Backend (Node.js + Express + MySQL)
-```sh
+```bash
 npm install
 ```
 #### Frontend (Vue.js)
-```sh
+```bash
 cd frontend
 npm install
 ```
 
+### 2. Acquérir le dataset et créer la base de données
+Les datasets qui vont constituer notre base de données se trouvent [sur ce lien Kaggle](https://www.kaggle.com/datasets/joebeachcapital/board-games).
+- Téléchargez les deux fichiers `.csv` et mettez-les dans le dossier `dataset`.
+- Lancez le fichier python `create-insertion-file.py`
+
+Ce script va créer le fichier `insertion-file.sql` qui servira à peupler notre base de données.
+
 ### 3️. Configurer la base de données et variables d'environnement
 - Ayez **MySQL** installé et en cours d'exécution.
 - Dans **MySQL Workbench**, créez une base de données nommée `gamedle` (ou comme vous voulez).
-- Complétez la base de données en exécutant ces requêtes SQL : 
-**`To Do : donner le fichier SQL pour comléter la BDD`**
+- Lancez le fichier `table-creation.sql` pour créer les tables de notre BDD.
+- Puis peuplez la base de données en lançant le fichier `insertion-file.sql` précédemment créé.
 
-- Allez dans le dossier `backend` et créez votre variable d'environnement `.env` comme suit :
-```
+- Dans la racine du projet, créez votre variable d'environnement `.env` comme suit :
+```bash
 PORT=3000
 DB_HOST=localhost
 DB_USER=root
@@ -42,11 +49,11 @@ Notez que ce sont des données génériques, vous pouvez changer le port de l'AP
 ### 4️. Lancer l'application
 #### Démarrer le backend
 Depuis la racine du projet :
-```sh
+```bash
 node backend/index.js
 ```
 #### Démarrer le frontend
-```sh
+```bash
 cd frontend
 npm run serve
 ```
@@ -56,10 +63,10 @@ L'application devrait se lancer sur `http://localhost:8080`
 ---
 
 ## Fonctionnalités
-- 🔹 Page d'accueil (pas encore de style)
-- 🔹 Page de jeu (idem, et logique de jeu non implémentée)
-- 🔹 Page "À propos" (toujours aucun style)
-- 🔹 Connexion administrateur (à venir)
+- Page d'accueil
+- Page de jeu (logique de jeu non implémentée)
+- Page "À propos" (toujours aucun style)
+- Connexion administrateur (à venir)
 
 ---
 
