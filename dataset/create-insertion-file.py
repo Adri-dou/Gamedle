@@ -37,6 +37,7 @@ categories = set()
 mechanics = set()
 creators = {}
 creator_id = 1
+created_pairs = set()
 
 # SQL statements
 insertions = {
@@ -93,10 +94,14 @@ for _, row in merged_df.iterrows():
             )
             creator_id += 1
         
-        insertions['created'].append(
-            f"INSERT INTO created (game_id, creator_id) VALUES ({game_id}, {creators[key]});"
-        )
-    
+        # Avoiding duplication in table created
+        pair = (game_id, creators[key])
+        if pair not in created_pairs:
+            created_pairs.add(pair)
+            insertions['created'].append(
+                f"INSERT INTO created (game_id, creator_id) VALUES ({game_id}, {creators[key]});"
+            )
+
     # --- Categories ---
     categories_list = safe_literal_eval(row.get('boardgamecategory'))
     for category in categories_list:
@@ -144,7 +149,7 @@ for _, row in merged_df.iterrows():
     
     # Handle year and time formatting
     year = row['yearpublished']
-    year_sql = f"'{int(year)}-01-01'" if pd.notna(year) else 'NULL'
+    year_sql = 'NULL' if pd.notna(year) and int(year) < 0 else f"'{int(year)}-01-01'"
     time_sql = f"'{playing_time // 60:02d}:{playing_time % 60:02d}:00'"
     
     insertions['game'].append(
