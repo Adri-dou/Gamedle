@@ -29,6 +29,19 @@ app.get('/', (req, res) => {
     res.send('<h1>Gamedle API is running</h1>');
 });
 
+app.get('/games', (req, res) => {
+    const query = `
+        SELECT * FROM GameDetails`;
+    
+    db.query(query, (err, results) => {
+        if (err) {
+            return res.status(500).json({ error: err.message });
+        }
+        res.json(results);
+    });
+});
+
+
 // Start server
 const PORT = process.env.PORT;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
