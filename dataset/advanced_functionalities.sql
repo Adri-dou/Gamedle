@@ -50,7 +50,7 @@ DELIMITER ;
 
 -- PROCEDURES
 -- Prends un jeu random et retourne l'id et le nom du jeu 
-drop procedure get_random_game;
+drop procedure if exists get_random_game;
 DELIMITER //
 CREATE PROCEDURE get_random_game()
 BEGIN
@@ -62,7 +62,7 @@ DELIMITER ;
 call get_random_game;
 
 -- 
-drop procedure game;
+drop procedure if exists game;
 DELIMITER //
 create procedure Game(jeu_id int)
 begin
@@ -74,7 +74,7 @@ DELIMITER ;
 call Game(3);
 
 -- 
-drop procedure Description
+drop procedure if exists Description
 DELIMITER //
 create procedure Description(jeu_id int)
 begin
@@ -87,7 +87,7 @@ call Description(3);
 
 -- 
 -- Pour chercher un jeu 
-drop procedure search_game
+drop procedure if exists search_game
 DELIMITER //
 create procedure search_game(game varchar(500))
 begin
