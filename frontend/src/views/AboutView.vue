@@ -62,10 +62,19 @@ const fetchGames = async () => {
   }
 };
 
-const filterGames = () => {
-  filteredGames.value = games.value.filter(game =>
-    game.Nom_Jeu.toLowerCase().includes(searchQuery.value.toLowerCase())
-  );
+const filterGames = async () => {
+  if (!searchQuery.value) {
+    filteredGames.value = games.value;
+    return;
+  }
+  try {
+    const response = await fetch(`${apiBase}/search?name=${encodeURIComponent(searchQuery.value)}`);
+    const result = await response.json();
+    filteredGames.value = result;
+  } catch (error) {
+    console.error('Erreur lors de la recherche :', error);
+    filteredGames.value = [];
+  }
 };
 
 onMounted(fetchGames);

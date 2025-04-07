@@ -28,16 +28,32 @@ db.connect(err => {
 app.get('/', (req, res) => {
   res.send('<h1>Gamedle API is running</h1>');
 });
-
+//-----------------------------------------------------------------------------------------------------------
+// A-propos 
 // Tous les jeux (via la vue GameDetails)
 app.get('/games', (req, res) => {
-  const query = `SELECT * FROM GameDetails`;
+  const query = `SELECT * FROM GameDetails ORDER BY Classement ASC`;
   db.query(query, (err, results) => {
     if (err) return res.status(500).json({ error: err.message });
     res.json(results);
   });
 });
 
+// Rechercher un jeu par son nom via la procédure stockée
+app.get('/search', (req, res) => {
+    const gameName = req.query.name;
+    if (!gameName) {
+      return res.status(400).json({ error: 'Le nom du jeu est requis dans le paramètre ?name=' });}
+    const query = `CALL search_game(?)`;
+    db.query(query, [gameName], (err, results) => {
+      if (err) return res.status(500).json({ error: err.message });
+      // Résultat de procédure stockée = tableau avec 1er élément : résultats de SELECT
+      res.json(results[0]);
+    });
+  });  
+
+//-----------------------------------------------------------------------------------------------------------
+// GameViews 
 // Jeu aléatoire (via procédure)
 app.get('/random-game', (req, res) => {
   db.query('CALL get_random_game()', (err, results) => {
