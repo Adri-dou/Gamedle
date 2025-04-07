@@ -44,15 +44,17 @@ DB_USER=root
 DB_PASS=votreMDP
 DB_NAME=gamedle
 ```
-Notez que ce sont des données génériques, vous pouvez changer le port de l'API au besoin, et remplacez les autres telles qu'elles sont dans votre connexion MySQL.
+Notez que ce sont des données génériques, nous utiliserons le port 3000 pour l'API (si vous devez le changer, changez-le aussi dans le `main.js` du frontend).
+Remplacez les autres telles qu'elles sont dans votre connexion MySQL.
 
 ### 4️. Lancer l'application
 #### Démarrer le backend
-Depuis la racine du projet :
+Tapez dans un terminal depuis la racine du projet :
 ```bash
 node backend/index.js
 ```
 #### Démarrer le frontend
+Ouvrez un 2e terminal et lancez le client depuis le frontend :
 ```bash
 cd frontend
 npm run serve
@@ -63,7 +65,7 @@ L'application devrait se lancer sur `http://localhost:8080`
 ---
 
 ## Fonctionnalités
-- Page d'accueil
+- Page d'accueil (à peaufiner)
 - Page de jeu (logique de jeu non implémentée)
 - Page "À propos" (toujours aucun style)
 - Connexion administrateur (à venir)

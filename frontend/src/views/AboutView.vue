@@ -32,7 +32,7 @@
         <div class="game-details">
           <p><strong>Catégories :</strong> {{ game.Catégories || 'Non classé' }}</p>
           <p><strong>Joueurs :</strong> {{ game.Min_Joueurs }} à {{ game.Max_Joueurs }}</p>
-          <p><strong>Année :</strong> {{ game.Annee_Publication || 'Inconnue' }}</p>
+          <p><strong>Année de Sortie :</strong> {{ game.Annee_Publication || 'Inconnue' }}</p>
           <p><strong>Éditeur :</strong> {{ game.Editeur || 'Inconnu' }}</p>
         </div>
       </li>
@@ -40,24 +40,28 @@
   </div>
 </template>
 
+
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, getCurrentInstance } from 'vue';
 
 const games = ref([]);
 const searchQuery = ref('');
 const filteredGames = ref([]);
 
+// Accès à $apiBase défini dans main.js
+const { proxy } = getCurrentInstance();
+const apiBase = proxy.$apiBase;
+
 const fetchGames = async () => {
   try {
-    const response = await fetch('http://localhost:8000/games'); // Assure-toi que cette route existe dans le backend
+    const response = await fetch(`${apiBase}/games`);
     games.value = await response.json();
-    filteredGames.value = games.value; // Initialisation avec tous les jeux
+    filteredGames.value = games.value;
   } catch (error) {
     console.error('Erreur lors du chargement des jeux :', error);
   }
 };
 
-// Filtre les jeux en fonction de la recherche
 const filterGames = () => {
   filteredGames.value = games.value.filter(game =>
     game.Nom_Jeu.toLowerCase().includes(searchQuery.value.toLowerCase())
@@ -66,6 +70,7 @@ const filterGames = () => {
 
 onMounted(fetchGames);
 </script>
+
 
 <style scoped>
 
