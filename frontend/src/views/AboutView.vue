@@ -118,6 +118,13 @@ onMounted(fetchGames);
   text-align: center;
 }
 
+.search-bar input {
+  font-family: "ADLaM Display", sans-serif;
+  font-size: 15px;
+  border-radius: 20px;
+  border: inset #b0efb1 3px;
+}
+
 .search-input {
   width: 60%;
   padding: 10px;
