@@ -155,4 +155,18 @@ end
 DELIMITER ;
 
 call search_game('catan') 
-	
+-- Supp un jeu et toutes ses relations
+
+DELIMITER //
+create procedure delete_game(id int)
+begin
+	DELETE FROM GameOfTheDay WHERE game_id = id;
+	DELETE FROM created WHERE game_id = id;
+	DELETE FROM is_categorised_as WHERE game_id = id;
+	DELETE FROM has_mechanics WHERE game_id = id;
+    --
+    Delete from game where game_id = id;
+end; //
+DELIMITER ;
+
+call delete_game(161936)

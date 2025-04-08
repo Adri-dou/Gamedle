@@ -25,11 +25,10 @@ db.connect(err => {
     initializeGameOfTheDay(); // Ajout de l'initialisation
   }
 });
-
-// Nouvelle fonction à ajouter
+//-----------------------------------------------------------------------------------------------------------
+// Initialisation du jeu du jour
 function initializeGameOfTheDay() {
   const today = new Date().toISOString().split('T')[0];
-  
   const checkQuery = 'SELECT * FROM GameOfTheDay WHERE date = ?';
   db.query(checkQuery, [today], (err, results) => {
     if (err) {
@@ -126,16 +125,13 @@ app.post('/add-game', (req, res) => {
 app.delete('/delete-game/:id', (req, res) => {
   const gameId = req.params.id;
   console.log("Suppression demandée pour game_id :", gameId);
-  const sql = 'DELETE FROM Game WHERE game_id = ?';
+  const sql = 'CALL delete_game(?)';
   db.query(sql, [gameId], (err, result) => {
     if (err) {
       console.error("Erreur MySQL :", err);
       return res.status(500).json({ error: 'Erreur MySQL: ' + err.message });
     }
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ error: "Aucun jeu trouvé avec cet ID." });
-    }
-    res.json({ message: 'Jeu supprimé avec succès' });
+    res.json({ message: 'Jeu supprimé avec succès' });  
   });
 });
 //-----------------------------------------------------------------------------------------------------------

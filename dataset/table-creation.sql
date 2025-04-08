@@ -85,11 +85,6 @@ CREATE TABLE User_Game (
     user_role ENUM('user', 'administrateur') NOT NULL DEFAULT 'user'
 );
 
-CREATE TABLE User_Game (
-    username VARCHAR(500) PRIMARY KEY,
-    user_password VARCHAR(500) NOT NULL,
-    user_role ENUM('user', 'administrateur') NOT NULL DEFAULT 'user'
-);
 
 CREATE TABLE GameOfTheDay (
     date DATE PRIMARY KEY,
