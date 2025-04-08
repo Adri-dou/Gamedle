@@ -2,6 +2,7 @@
 -- Generated from 498 games
 
 -- CONTRIBUTION TYPES
+
 INSERT INTO Contribution (sector) VALUES ('Design');
 INSERT INTO Contribution (sector) VALUES ('Art');
 

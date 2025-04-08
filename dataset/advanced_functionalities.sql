@@ -2,6 +2,7 @@ Use gamedle;
 -- ADVANCED FUNCTIONALITIES
 -- VIEW 
 
+drop view if exists GameDetails;
 CREATE VIEW GameDetails AS
 SELECT 
     g.game_id,
@@ -42,7 +43,7 @@ select * from View_GameOfTheDay;
 
 -- INDEX 
 -- pour accélérer la recherche par nom de jeu
-drop index idx_game on game;
+-- drop index idx_game on game;
 create index idx_game on Game(name);
 show index from game;
 -- pour faciliter la recherche des jeux par catégorie
@@ -56,7 +57,7 @@ show index from game;
 
 -- TRIGGERS 
 -- Ajoute une catégorie si elle n'existe pas lors de l'ajout d'un jeu
-drop trigger insert_category
+drop trigger if exists insert_category
 DELIMITER //
 create trigger insert_category before insert on is_categorised_as
 for each row

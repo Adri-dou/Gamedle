@@ -8,11 +8,11 @@ CREATE TABLE Publisher(
    name VARCHAR(500) NOT NULL,
    PRIMARY KEY(publisher_id)
 );
-/*
+
 CREATE TABLE Contribution(
    sector VARCHAR(500),
    PRIMARY KEY(sector)
-);*/
+);
 
 CREATE TABLE Category(
    category_name VARCHAR(500),
@@ -38,6 +38,12 @@ CREATE TABLE Game(
    PRIMARY KEY(game_id),
    FOREIGN KEY(publisher_id) REFERENCES Publisher(publisher_id),
    CHECK (minPlayer <= maxPlayer)
+);
+
+CREATE TABLE GameOfTheDay (
+    date DATE PRIMARY KEY,
+   game_id INT,
+   FOREIGN KEY(game_id) REFERENCES Game(game_id)
 );
 
 CREATE TABLE Creator(
@@ -71,4 +77,10 @@ CREATE TABLE has_mechanics(
    PRIMARY KEY(game_id, mechanic_type),
    FOREIGN KEY(game_id) REFERENCES Game(game_id),
    FOREIGN KEY(mechanic_type) REFERENCES Mechanic(mechanic_type)
+);
+
+CREATE TABLE User_Game (
+    username VARCHAR(500) PRIMARY KEY,
+    user_password VARCHAR(500) NOT NULL,
+    user_role ENUM('user', 'administrateur') NOT NULL DEFAULT 'user'
 );
