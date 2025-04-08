@@ -29,6 +29,78 @@ app.get('/', (req, res) => {
   res.send('<h1>Gamedle API is running</h1>');
 });
 //-----------------------------------------------------------------------------------------------------------
+// User Part 
+// Inscription d’un utilisateur
+app.post('/register', (req, res) => {
+  const { username, user_password, user_role } = req.body;
+  if (!username || !user_password || !user_role) {
+    return res.status(400).json({ error: 'Champs manquants' });
+  }
+  const validRoles = ['user', 'administrateur'];
+  if (!validRoles.includes(user_role)) {
+    return res.status(400).json({ error: 'Rôle invalide' });
+  }
+  const sql = `INSERT INTO User_Game (username, user_password, user_role) VALUES (?, ?, ?)`;
+  db.query(sql, [username, user_password, user_role], (err, result) => {
+    if (err) {
+      if (err.code === 'ER_DUP_ENTRY') {
+        return res.status(409).json({ error: 'Nom d\'utilisateur déjà pris' });
+      }
+      return res.status(500).json({ error: 'Erreur MySQL: ' + err.message });
+    }
+    res.json({ message: 'Utilisateur ajouté avec succès' });
+  });
+});
+
+// Connexion d’un utilisateur
+app.post('/login', (req, res) => {
+  const { username, user_password } = req.body;
+  if (!username || !user_password) {
+    return res.status(400).json({ error: 'Champs manquants' });
+  }
+  const sql = `SELECT * FROM User_Game WHERE username = ? AND user_password = ?`;
+  db.query(sql, [username, user_password], (err, results) => {
+    if (err) return res.status(500).json({ error: err.message });
+    if (results.length === 0) return res.status(401).json({ error: 'Nom d\'utilisateur ou mot de passe incorrect' });
+    res.json(results[0]);
+  });
+});
+//-----------------------------------------------------------------------------------------------------------
+// Admin Part
+// Ajout d’un jeu 
+// Ajouter un jeu
+app.post('/add-game', (req, res) => {
+  const { game_id, minAge, minPlayer, ranking, maxPlayer, yearPublished, name, description, playingTime, publisher_id } = req.body;
+  const sql = `
+    INSERT INTO Game (game_id, minAge, minPlayer, ranking, maxPlayer, yearPublished, name, description, playingTime, publisher_id)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `;
+  db.query(sql, [game_id, minAge, minPlayer, ranking, maxPlayer, yearPublished, name, description, playingTime, publisher_id], (err) => {
+    if (err) {
+      console.error("Erreur MySQL :", err); // 🔥 Erreur précise
+      return res.status(500).json({ error: 'Erreur MySQL: ' + err.message });
+    }
+    res.json({ message: 'Jeu ajouté avec succès' });
+  });
+});
+//Supprimer un jeu
+// Supprimer un jeu par ID
+app.delete('/delete-game/:id', (req, res) => {
+  const gameId = req.params.id;
+  console.log("Suppression demandée pour game_id :", gameId);
+  const sql = 'DELETE FROM Game WHERE game_id = ?';
+  db.query(sql, [gameId], (err, result) => {
+    if (err) {
+      console.error("Erreur MySQL :", err);
+      return res.status(500).json({ error: 'Erreur MySQL: ' + err.message });
+    }
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: "Aucun jeu trouvé avec cet ID." });
+    }
+    res.json({ message: 'Jeu supprimé avec succès' });
+  });
+});
+//-----------------------------------------------------------------------------------------------------------
 // A-propos 
 // Tous les jeux (via la vue GameDetails)
 app.get('/games', (req, res) => {

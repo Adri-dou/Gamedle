@@ -72,3 +72,9 @@ CREATE TABLE has_mechanics(
    FOREIGN KEY(game_id) REFERENCES Game(game_id),
    FOREIGN KEY(mechanic_type) REFERENCES Mechanic(mechanic_type)
 );
+
+CREATE TABLE GameOfTheDay (
+    date DATE PRIMARY KEY,
+   game_id INT,
+   FOREIGN KEY(game_id) REFERENCES Game(game_id)
+);
