@@ -28,6 +28,8 @@ onMounted(() => {
 
 
 <style>
+@import url('https://fonts.cdnfonts.com/css/adlam-display');
+
 body {
   margin: 0;
   padding: 0;
@@ -103,6 +105,44 @@ nav a.logo {
 
 #liButton button:hover {
   background-color: #ff8c00;
+}
+
+h1 {
+  font-family: "ADLaM Display", sans-serif;
+  font-size: 40px;
+  color: black;
+}
+
+h2 {
+  font-family: "ADLaM Display", sans-serif;
+  font-size: 30px;
+  color: black;
+}
+
+p {
+  font-family: "ADLaM Display", sans-serif;
+  font-size: 20px;
+  color: black;
+}
+
+input {
+  font-family: "ADLaM Display", sans-serif;
+  font-size: 15px;
+  border-radius: 20px;
+  border: inset #b0efb1 3px;
+}
+
+button {
+  font-family: "ADLaM Display", sans-serif;
+  border-radius: 20px;
+  background-color: rgb(192, 192, 192);
+  border: inset 3px rgb(176, 239, 177);
+}
+
+a {
+  font-family: "ADLaM Display", sans-serif;
+  font-size: 15px;
+  color: #1b00cb;
 }
 
 </style>

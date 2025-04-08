@@ -2,9 +2,11 @@
   <div class="game-container">
     <div class="header">
       <img src="@/assets/Gamedle_Logo.png" alt="Gamedle" class="logo" />
-      <p>Devinez le jeu de société du jour !</p>
-      <div v-if="targetGame" class="target-info">
-        Jeu aléatoire chargé : {{ targetGame.Nom_Jeu }} (debug)
+      <div class="game-info-container">
+        <h2>Devinez le jeu de société du jour !</h2>
+        <div v-if="targetGame" class="target-info">
+          Jeu aléatoire chargé : {{ targetGame.Nom_Jeu }} (debug)
+        </div>
       </div>
     </div>
 
@@ -209,4 +211,29 @@ input {
   text-align: center;
   border-radius: 5px;
 }
+
+.target-info {
+  font-family: "ADLaM Display", sans-serif;
+  color: white;
+  margin: 10px;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.game-info-container {
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(0,0,0,0.51);
+  border-radius: 20px;
+}
+
+.game-info-container h2{
+  color: white;
+  margin: 10px;
+}
+
 </style>

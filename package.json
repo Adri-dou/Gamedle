@@ -18,6 +18,8 @@
   },
   "homepage": "https://github.com/Adri-dou/Gamedle#readme",
   "dependencies": {
+    "axios": "^1.8.4",
+    "bootstrap": "^5.3.5",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",

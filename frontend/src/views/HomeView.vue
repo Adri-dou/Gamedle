@@ -37,10 +37,7 @@
 
 /* Titre */
 h2 {
-  font-size: 24px;
-  font-weight: bold;
   margin-bottom: 20px;
-  color:black;
 }
 
 /* Conteneur du bouton "Classique" */
@@ -72,7 +69,8 @@ h2 {
   display: flex; 
   align-items: center; 
   justify-content: center;
-  text-align: center; 
+  text-align: center;
+  font-family: "ADLaM Display", sans-serif;
 }
 
 
@@ -99,6 +97,7 @@ h2 {
   padding: 10px 20px;
   border-radius: 8px;
   transition: 0.3s;
+  font-family: "ADLaM Display", sans-serif;
 }
 
 .about-button:hover {
