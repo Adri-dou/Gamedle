@@ -135,6 +135,31 @@ app.delete('/delete-game/:id', (req, res) => {
   });
 });
 //-----------------------------------------------------------------------------------------------------------
+//Admin Part - Manage Users 
+//User List
+app.get('/users', (req, res) => {
+  const sql = `SELECT * FROM UserList`; // La vue
+  db.query(sql, (err, results) => {
+    if (err) return res.status(500).json({ error: 'Erreur MySQL: ' + err.message });
+    res.json(results);
+  });
+});
+//Add User Role
+app.put('/users/update-role', (req, res) => {
+  const { username, newRole } = req.body;
+  const validRoles = ['user', 'administrateur'];
+
+  if (!validRoles.includes(newRole)) {
+    return res.status(400).json({ error: 'Rôle invalide' });
+  }
+
+  const sql = `CALL UpdateUserRole(?, ?)`;
+  db.query(sql, [username, newRole], (err) => {
+    if (err) return res.status(500).json({ error: 'Erreur MySQL: ' + err.message });
+    res.json({ message: 'Rôle mis à jour avec succès' });
+  });
+});
+//-----------------------------------------------------------------------------------------------------------
 // A-propos 
 // Tous les jeux (via la vue GameDetails)
 app.get('/games', (req, res) => {

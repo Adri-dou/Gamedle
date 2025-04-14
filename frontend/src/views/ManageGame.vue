@@ -23,7 +23,7 @@
       <ul>
         <li v-for="game in games" :key="game.game_id">
           {{ game.name }} (ID: {{ game.game_id }}) - 
-          <button @click="deleteGame(game.game_id)">Supprimer</button>
+          <button @click="deleteGame(game.game_id, game.name)">Supprimer</button>
         </li>
       </ul>
     </div>

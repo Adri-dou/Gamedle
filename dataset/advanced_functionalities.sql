@@ -2,7 +2,6 @@ Use gamedle;
 -- ADVANCED FUNCTIONALITIES
 -- VIEW 
 
-drop view if exists GameDetails;
 CREATE VIEW GameDetails AS
 SELECT 
     g.game_id,
@@ -40,10 +39,16 @@ FROM GameOfTheDay go
 JOIN Game g ON g.game_id = go.game_id;
 
 select * from View_GameOfTheDay;
+--
+CREATE VIEW UserList AS
+SELECT username, user_role
+FROM User_Game;
+
+select * from userList;
 
 -- INDEX 
 -- pour accélérer la recherche par nom de jeu
--- drop index idx_game on game;
+drop index idx_game on game;
 create index idx_game on Game(name);
 show index from game;
 -- pour faciliter la recherche des jeux par catégorie
@@ -57,7 +62,7 @@ show index from game;
 
 -- TRIGGERS 
 -- Ajoute une catégorie si elle n'existe pas lors de l'ajout d'un jeu
-drop trigger if exists insert_category
+drop trigger insert_category
 DELIMITER //
 create trigger insert_category before insert on is_categorised_as
 for each row
@@ -110,7 +115,7 @@ DELIMITER ;
 INSERT INTO GameOfTheDay (date) VALUES (DATE(NOW()));
 -- PROCEDURES
 -- Prends un jeu random et retourne l'id et le nom du jeu 
-drop procedure if exists get_random_game;
+drop procedure get_random_game;
 DELIMITER //
 CREATE PROCEDURE get_random_game()
 BEGIN
@@ -122,7 +127,7 @@ DELIMITER ;
 call get_random_game;
 
 -- 
-drop procedure if exists game;
+drop procedure game;
 DELIMITER //
 create procedure get_game(jeu_id int)
 begin
@@ -134,7 +139,7 @@ DELIMITER ;
 call get_game(3);
 
 -- 
-drop procedure if exists Description
+drop procedure Description
 DELIMITER //
 create procedure Description(jeu_id int)
 begin
@@ -145,17 +150,18 @@ DELIMITER ;
 call Description(3);
 -- 
 -- Pour chercher un jeu 
-drop procedure if exists search_game
+drop procedure search_game
 DELIMITER //
-create procedure search_game(game varchar(500))
-begin
-	select * from GameDetails where Nom_Jeu = game;
-end
-// 
+CREATE PROCEDURE search_game(IN gameName VARCHAR(500))
+BEGIN
+    SELECT * 
+    FROM GameDetails 
+    WHERE Nom_Jeu LIKE CONCAT('%', gameName, '%');
+END; //
 DELIMITER ;
 
-call search_game('catan') 
--- Supp un jeu et toutes ses relations
+call search_game('catan') ;
+--
 
 DELIMITER //
 create procedure delete_game(id int)
@@ -170,3 +176,13 @@ end; //
 DELIMITER ;
 
 call delete_game(161936)
+--
+DELIMITER //
+CREATE PROCEDURE UpdateUserRole(IN p_username VARCHAR(500), IN p_role ENUM('user', 'administrateur'))
+BEGIN
+  UPDATE User_Game
+  SET user_role = p_role
+  WHERE username = p_username;
+END;
+//
+DELIMITER ;

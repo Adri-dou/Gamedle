@@ -3,11 +3,18 @@
     <nav>
       <router-link to="/">Accueil</router-link> 
       <router-link to="/jeu">Jouer</router-link> 
-      <router-link to="/SignIn">Login</router-link>
-      <router-link to="/SignUp">Register</router-link>
-      <router-link to="/a-propos">À propos</router-link>
+
+      <!-- Cacher login/register si connecté -->
+      <router-link v-if="!isLoggedIn" to="/SignIn">Login</router-link>
+      <router-link v-if="!isLoggedIn" to="/SignUp">Register</router-link>
+
       <!-- Visible uniquement pour les admins -->
+      <router-link v-if="isAdmin" to="/manage-user">Manage User</router-link>
       <router-link v-if="isAdmin" to="/manage-game">Manage Game</router-link>
+
+      <router-link to="/a-propos">À propos</router-link>
+      <router-link v-if="isLoggedIn" @click.prevent="logout" to="#">Se déconnecter</router-link>
+
     </nav>
 
     <router-view />    
@@ -17,13 +24,30 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 const isAdmin = ref(false);
+const isLoggedIn = ref(false);
 
-onMounted(() => {
+const updateUserState = () => {
   const role = localStorage.getItem('userRole');
+  const username = localStorage.getItem('username');
+
   isAdmin.value = role === 'administrateur';
-});
+  isLoggedIn.value = !!username;
+};
+
+const logout = () => {
+  localStorage.removeItem('userRole');
+  localStorage.removeItem('username');
+  isAdmin.value = false;
+  isLoggedIn.value = false;
+  router.push('/');
+};
+
+onMounted(updateUserState);
+
 </script>
 
 
