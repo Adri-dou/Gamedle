@@ -5,7 +5,7 @@
       <div class="game-info-container">
         <h2>Devinez le jeu de société du jour !</h2>
         <div v-if="targetGame" class="target-info">
-          Jeu aléatoire chargé : {{ targetGame.Nom_Jeu }} (debug)
+          Jeu aléatoire chargé : {{ targetGame.name }} (debug)
         </div>
       </div>
     </div>
@@ -80,69 +80,150 @@ export default {
     await this.fetchRandomGame();
   },
   methods: {
-    async fetchRandomGame() {
-      // À remplacer par l'appel API plus tard
-      const mockGame = {
-        game_id: 3,
-        Nom_Jeu: "Samurai",
-        Catégories: ["Abstract Strategy", "Medieval"],
-        Min_Joueurs: 2,
-        Max_Joueurs: 4,
-        Annee_Publication: 1998,
-        Editeur: "Fantasy Flight Games",
-        Classement: 231
-      };
-      this.targetGame = mockGame;
-    },
+  async fetchRandomGame() {
+    try {
+      const response = await fetch('http://localhost:8000/game-of-the-day');
+      if (!response.ok) throw new Error('Erreur lors de la récupération du jeu du jour');
+      
+      const game = await response.json();
 
-    async submitGuess() {
-      if (!this.currentGuess) return;
+      console.log("🎯 Jeu du jour reçu depuis l'API :", game); // 👈 ICI
 
-      // À remplacer par l'appel API aussi
-      const mockResponse = {
-        game_id: 1,
-        Nom_Jeu: this.currentGuess,
-        Catégories: ["Strategy", "Medieval"],
-        Min_Joueurs: 2,
-        Max_Joueurs: 5,
-        Annee_Publication: 2005,
-        Editeur: "Mock Publisher",
-        Classement: 150
-      };
-
-      this.attempts.push({
-        ...mockResponse,
-        Catégories: mockResponse.Catégories.split(', ')
-      });
-
-      if (mockResponse.Nom_Jeu === this.targetGame.Nom_Jeu) {
-        this.gameWon = true;
+      // Si les catégories sont fournies en chaîne, les transformer en tableau
+      if (game.Catégories) {
+        game.Catégories = Array.isArray(game.Catégories)
+          ? game.Catégories
+          : game.Catégories.split(', ');
+      } else {
+        game.Catégories = []; // fallback si la propriété est absente
       }
+      
+    game.Nom_Jeu = game.name;
+    game.Min_Joueurs = game.minPlayer;
+    game.Max_Joueurs = game.maxPlayer;
+    game.Annee_Publication = new Date(game.yearPublished).getFullYear();
+    game.Classement = game.ranking;
+    game.Editeur = game.publisher;
 
-      this.currentGuess = '';
-    },
 
-    getStatusClass(propertyKey, attemptValue, targetValue) {
-      if (propertyKey === 'Catégories') {
-        const commonCategories = attemptValue.filter(c => 
-          this.targetGame.Catégories.includes(c)
-        );
-        if (commonCategories.length === 0) return 'incorrect';
-        return commonCategories.length === this.targetGame.Catégories.length ? 'correct' : 'partial';
-      }
+      this.targetGame = game;
+    } catch (error) {
+      console.error('Erreur dans fetchRandomGame:', error);
+    }
+  },
 
-      if (attemptValue === targetValue) return 'correct';
-      return 'incorrect';
-    },
+  async submitGuess() {
+  if (!this.currentGuess) return;
+
+  try {
+    const response = await fetch(`http://localhost:8000/search?name=${encodeURIComponent(this.currentGuess)}`);
+    
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error("Erreur API:", errorData.error);
+      return;
+    }
+
+    const results = await response.json();
+    
+    if (results.length === 0) {
+      console.warn('Aucun jeu trouvé pour:', this.currentGuess);
+      return;
+    }
+
+    let game = results[0];
+
+    game.Catégories = game.Catégories
+      ? Array.isArray(game.Catégories)
+        ? game.Catégories
+        : game.Catégories.split(', ')
+      : [];
+
+    this.attempts.push(game);
+
+    if (game.Nom_Jeu === this.targetGame.Nom_Jeu) {
+      this.gameWon = true;
+    }
+
+    this.currentGuess = '';
+  } catch (error) {
+    console.error('Erreur dans submitGuess:', error);
+  }
+},
+
+getStatusClass(propertyKey, attemptValue, targetValue) {
+  if (propertyKey === 'Catégories') {
+    const attemptCategories = Array.isArray(attemptValue)
+      ? attemptValue.map(c => c.trim().toLowerCase())
+      : String(attemptValue).split(',').map(c => c.trim().toLowerCase());
+
+    const targetCategories = Array.isArray(targetValue)
+      ? targetValue.map(c => c.trim().toLowerCase())
+      : String(targetValue).split(',').map(c => c.trim().toLowerCase());
+
+    const common = attemptCategories.filter(cat =>
+      targetCategories.includes(cat)
+    );
+
+    const result =
+      common.length === 0
+        ? 'incorrect'
+        : common.length === targetCategories.length &&
+          attemptCategories.length === targetCategories.length
+        ? 'correct'
+        : 'partial';
+
+    console.log(`🧩 [Catégories]`, { attemptCategories, targetCategories, common, result });
+
+    return result;
+  }
+
+  if (['Classement', 'Annee_Publication'].includes(propertyKey)) {
+    const a = parseInt(attemptValue);
+    const b = parseInt(targetValue);
+    const result = isNaN(a) || isNaN(b) ? 'incorrect' : a === b ? 'correct' : 'incorrect';
+
+    console.log(`📅 [${propertyKey}]`, { attempt: a, target: b, result });
+
+    return result;
+  }
+
+  if (['Min_Joueurs', 'Max_Joueurs'].includes(propertyKey)) {
+    const a = parseInt(attemptValue);
+    const b = parseInt(targetValue);
+
+    let result = 'incorrect';
+    if (!isNaN(a) && !isNaN(b)) {
+      result = a === b ? 'correct' : Math.abs(a - b) <= 1 ? 'partial' : 'incorrect';
+    }
+
+    console.log(`👥 [${propertyKey}]`, { attempt: a, target: b, result });
+
+    return result;
+  }
+
+  const a = String(attemptValue).trim().toLowerCase();
+  const b = String(targetValue).trim().toLowerCase();
+  const result = a === b ? 'correct' : 'incorrect';
+
+  console.log(`🏷️ [${propertyKey}]`, { attempt: a, target: b, result });
+
+  return result;
+}
+,
+
 
     showArrow(key) {
       return ['Classement', 'Annee_Publication'].includes(key);
     },
 
     getArrow(key, attemptValue, targetValue) {
-      if (attemptValue === targetValue) return '';
-      return attemptValue > targetValue ? '↓' : '↑';
-    }
+  const a = parseFloat(attemptValue);
+  const b = parseFloat(targetValue);
+  if (isNaN(a) || isNaN(b) || a === b) return '';
+  return a > b ? '↓' : '↑';
+}
+
   }
 }
 </script>
@@ -196,7 +277,7 @@ input {
 
 .correct { background-color: #6aaa64; color: white; }
 .partial { background-color: #c9b458; color: white; }
-.incorrect { background-color: #787c7e; color: white; }
+.incorrect { background-color: #766d6d; color: white; }
 
 .arrow {
   font-size: 1.2em;

@@ -30,13 +30,31 @@ group by g.game_id, g.name, g.description;
 
 select * from Game_Description;
 --
+drop view GameOfTheDay;
 CREATE VIEW View_GameOfTheDay AS
 SELECT
+    go.date,
     g.game_id,
     g.name,
-    go.date
+    g.minAge,
+    g.minPlayer,
+    g.maxPlayer,
+    g.ranking,
+    g.yearPublished,
+    g.playingTime,
+    p.name AS publisher,
+    
+    -- Catégories sous forme de chaîne : "Stratégie, Aventure"
+    (
+      SELECT GROUP_CONCAT(ic.category_name SEPARATOR ', ')
+      FROM is_categorised_as ic
+      WHERE ic.game_id = g.game_id
+    ) AS Catégories
+
+
 FROM GameOfTheDay go
-JOIN Game g ON g.game_id = go.game_id;
+JOIN Game g ON g.game_id = go.game_id
+LEFT JOIN Publisher p ON p.publisher_id = g.publisher_id;
 
 select * from View_GameOfTheDay;
 --
