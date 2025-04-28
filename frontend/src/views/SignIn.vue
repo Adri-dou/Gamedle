@@ -89,7 +89,7 @@ button {
   font-size: 16px;
   font-weight: bold;
   color: white;
-  background-color: #007BFF;
+  background-color: #e74c3c;
   border: none;
   border-radius: 6px;
   cursor: pointer;

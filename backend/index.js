@@ -162,6 +162,7 @@ app.put('/users/update-role', (req, res) => {
 //-----------------------------------------------------------------------------------------------------------
 // A-propos 
 // Tous les jeux (via la vue GameDetails)
+// Utilisation de la VIEW GameDetails pour récupérer tous les jeux
 app.get('/games', (req, res) => {
   const query = `SELECT * FROM GameDetails ORDER BY Classement ASC`;
   db.query(query, (err, results) => {
@@ -169,6 +170,18 @@ app.get('/games', (req, res) => {
     res.json(results);
   });
 });
+//TOUS les jeux 
+//Utilisation de la table Game pour récupérer tous les jeux
+// Récupérer tous les jeux directement depuis la table Game
+app.get('/all-games', (req, res) => {
+  const query = `SELECT * FROM Game ORDER BY name ASC`;
+  db.query(query, (err, results) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json(results);
+  });
+});
+
+
 
 // Rechercher un jeu par son nom via la procédure stockée
 app.get('/search', (req, res) => {

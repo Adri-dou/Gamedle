@@ -1,46 +1,52 @@
 <template>
-    <div class="register-container">
-      <h2>Ajouter un utilisateur</h2>
-      <form @submit.prevent="registerUser">
-        <input v-model="form.username" placeholder="Nom d'utilisateur" required />
-        <input v-model="form.user_password" type="password" placeholder="Mot de passe" required />
+  <div class="register-container">
+    <h2>Ajouter un utilisateur</h2>
+    <form @submit.prevent="registerUser">
+      <input v-model="form.username" placeholder="Nom d'utilisateur" required />
+      <input v-model="form.user_password" type="password" placeholder="Mot de passe" required />
+
+      <button type="submit">Ajouter</button>
+    </form>
+    <p v-if="message">{{ message }}</p>
+  </div>
+</template>
+
   
-        <select v-model="form.user_role">
-          <option value="user">Utilisateur</option>
-          <option value="administrateur">Administrateur</option>
-        </select>
-  
-        <button type="submit">Ajouter</button>
-      </form>
-      <p v-if="message">{{ message }}</p>
-    </div>
-  </template>
-  
-  <script setup>
-  import { ref, getCurrentInstance } from 'vue';
-  const form = ref({
-    username: '',
-    user_password: '',
-    user_role: 'user'
-  });
-  const message = ref('');
-  const { proxy } = getCurrentInstance();
-  const apiBase = proxy.$apiBase;
-  
-  const registerUser = async () => {
-    try {
-      const res = await fetch(`${apiBase}/register`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form.value)
-      });
-      const data = await res.json();
-      message.value = data.message || data.error;
-    } catch (err) {
-      message.value = 'Erreur lors de l’inscription';
-    }
-  };
-  </script>
+<script setup>
+import { ref, getCurrentInstance } from 'vue';
+
+const form = ref({
+  username: '',
+  user_password: '',
+  user_role: 'user'  // Toujours "user"
+});
+
+const message = ref('');
+const { proxy } = getCurrentInstance();
+const apiBase = proxy.$apiBase;
+
+const registerUser = async () => {
+  try {
+    const userData = {
+      username: form.value.username,
+      user_password: form.value.user_password,
+      user_role: 'user' // Force toujours "user" même si quelqu'un manipule le code côté client
+    };
+    
+    const res = await fetch(`${apiBase}/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(userData)
+    });
+
+    const data = await res.json();
+    message.value = data.message || data.error;
+  } catch (err) {
+    message.value = 'Erreur lors de l’inscription';
+  }
+};
+</script>
+
   
   <style scoped>
 
@@ -81,7 +87,7 @@ select {
 
 input:focus,
 select:focus {
-  border-color: #007BFF;
+  background-color: #e74c3c;
 }
 
 button {
@@ -89,7 +95,7 @@ button {
   font-size: 16px;
   font-weight: bold;
   color: white;
-  background-color: #007BFF;
+  background-color: #e74c3c;
   border: none;
   border-radius: 6px;
   cursor: pointer;

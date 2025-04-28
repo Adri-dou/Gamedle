@@ -22,14 +22,19 @@
     </div>
 
     <div class="attempts-list">
+        <!-- Ligne d'en-têtes -->
+      <div class="header-row">
+        <div v-for="(property, key) in comparableProperties" :key="key" class="header-cell">
+          {{ property.name }}
+        </div>
+      </div>
       <div v-for="(attempt, index) in attempts" :key="index" class="attempt">
-        <div class="game-name">{{ attempt.Nom_Jeu }}</div>
+        <div class="game-name"><strong>{{ attempt.Nom_Jeu }}</strong></div>
         <div class="game-properties">
-          <div v-for="(property, key) in comparableProperties" :key="key" class="property-cell">
+        <div v-for="(property, key) in comparableProperties" :key="key" class="property-cell">
             <div
               class="property-box"
-              :class="getStatusClass(key, attempt[key], targetGame[key])"
-            >
+              :class="getStatusClass(key, attempt[key], targetGame[key])">
               <template v-if="property.type === 'numeric'">
                 {{ attempt[key] }}
                 <span v-if="showArrow(key)" class="arrow">
@@ -47,14 +52,27 @@
                 {{ attempt[key] }}
               </template>
             </div>
-          </div>
         </div>
+</div>
+
       </div>
     </div>
 
     <div v-if="gameWon" class="win-message">
       Félicitations ! Vous avez trouvé le jeu en {{ attempts.length }} essais !
     </div>
+
+    <div class="instructions">
+  <h3>Comment interpréter les indices :</h3>
+  <ul>
+    <li><span class="box incorrect">⬛</span> → Cet attribut ne correspond pas du tout au jeu recherché.</li>
+    <li><span class="box partial">🟨</span> → Cet attribut est partiellement correct (presque ou partiellement similaire).</li>
+    <li><span class="box correct">🟩</span> → Cet attribut correspond exactement au jeu recherché.</li>
+    <li><span class="arrow">↑</span> → La valeur proposée est plus petite que celle du jeu recherché.</li>
+    <li><span class="arrow">↓</span> → La valeur proposée est plus grande que celle du jeu recherché.</li>
+  </ul>
+</div>
+
   </div>
 </template>
 
@@ -229,6 +247,88 @@ getStatusClass(propertyKey, attemptValue, targetValue) {
 </script>
 
 <style scoped>
+
+.instructions {
+  margin-top: 30px;
+  background-color: rgba(255, 255, 255, 0.7);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  border-radius: 12px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.instructions h3 {
+  margin-bottom: 15px;
+  text-align: center;
+  color: #333;
+}
+
+.instructions ul {
+  list-style: none;
+  padding: 0;
+}
+
+.instructions li {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  font-size: 1em;
+  color: #444;
+}
+
+.instructions .box {
+  width: 25px;
+  height: 25px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+  font-size: 1.5em;
+}
+
+.instructions .arrow {
+  font-size: 1.5em;
+  margin-right: 10px;
+}
+
+.game-name{
+  font-weight: bold;
+  font-size: 1.2em;
+  margin-bottom: 10px;
+  text-align: center;
+  background-color: rgba(0,0,0,0.51);
+  border-radius: 20px;
+  color: white;
+  padding: 10px;
+  margin: 10px;
+}
+
+.header-row {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.header-cell {
+  text-align: center;
+  font-weight: bold;
+  font-size: 0.9em;
+  background-color: #e0e0e0;
+  padding: 10px;
+  border-radius: 5px;
+  
+}
+
+.property-title {
+  font-weight: bold;
+  font-size: 0.8em;
+  margin-bottom: 5px;
+  text-align: center;
+  color: rgb(0, 0, 0);
+}
+
+
 .game-container {
   max-width: 800px;
   margin: 0 auto;
