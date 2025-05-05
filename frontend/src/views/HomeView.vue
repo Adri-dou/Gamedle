@@ -13,74 +13,70 @@
   </div>
 </template>
 
-
 <style scoped>
 .game-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 100%; /* Prend toute la largeur */
+  width: 100%;
   text-align: center;
   color: white;
+  padding-bottom: 8rem;
   position: relative;
-  padding-bottom: 20%; /* Ajout d'espace en bas pour le bouton "À propos" */
 }
-
 
 /* Logo */
 .logo {
-  width: 400px;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  width: 25rem;
+  margin: 2rem 0;
 }
 
 /* Titre */
 h2 {
-  margin-bottom: 20px;
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
 }
 
-/* Conteneur du bouton "Classique" */
+/* Conteneur du bouton */
 .button-container {
-  background: rgba(255, 255, 255, 0.5);
-  padding: 20px;
-  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.5);
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  width: 50%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 50%;
-  height: 100px;    
+  gap: 0.75rem;
 }
 
 /* Bouton "Classique" */
 .mode-button {
-  background: rgba(255, 255, 255, 0.7);
+  background-color: rgba(255, 255, 255, 0.7);
   border: none;
-  padding: 10px 20px;
-  font-size: 18px;
-  cursor: pointer;
-  border-radius: 8px;
+  padding: 1rem 2rem;
+  font-size: 1.25rem;
   font-weight: bold;
-  text-decoration: none;
   color: black;
-  transition: 0.3s;
-  width: 25%;
-  height: 200px;  
-  display: flex; 
-  align-items: center; 
-  justify-content: center;
-  text-align: center;
+  text-decoration: none;
+  border-radius: 0.5rem;
+  transition: background-color 0.3s;
   font-family: "ADLaM Display", sans-serif;
+  width: 100%;
+  max-width: 15rem;
+  height: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-
 
 .mode-button:hover {
-  background: #ddd;
+  background-color: #ddd;
 }
 
-/* Texte d'indice */
+/* Indice */
 .hint {
-  font-size: 14px;
+  font-size: 0.9rem;
   font-weight: bold;
   color: black;
 }
@@ -88,19 +84,19 @@ h2 {
 /* Bouton "À propos" */
 .about-button {
   position: absolute;
-  bottom: 20px;
-  text-decoration: none;
-  font-size: 16px;
-  font-weight: bold;
+  bottom: 1.5rem;
+  background-color: rgba(0, 0, 0, 0.6);
   color: white;
-  background: rgba(0, 0, 0, 0.6);
-  padding: 10px 20px;
-  border-radius: 8px;
-  transition: 0.3s;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: bold;
+  text-decoration: none;
+  border-radius: 0.5rem;
   font-family: "ADLaM Display", sans-serif;
+  transition: background-color 0.3s;
 }
 
 .about-button:hover {
-  background: rgba(0, 0, 0, 0.8);
+  background-color: rgba(0, 0, 0, 0.8);
 }
 </style>

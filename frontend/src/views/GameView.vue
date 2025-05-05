@@ -5,7 +5,7 @@
       <div class="game-info-container">
         <h2>Devinez le jeu de société du jour !</h2>
         <div v-if="targetGame" class="target-info">
-          Jeu aléatoire chargé : {{ targetGame.name }} (debug)
+        Jeu aléatoire chargé : {{ targetGame.name }} (debug)
         </div>
       </div>
     </div>
@@ -19,7 +19,16 @@
         :disabled="gameWon"
       />
       <button @click="submitGuess" :disabled="gameWon">Deviner</button>
+      <button @click="showHint = !showHint" class="hint-button">Indice</button>
     </div>
+
+    <div v-if="showHint && targetGame" class="hint-box">
+  <p>Le nom du jeu commence par : <strong>{{ targetGame.name.charAt(0).toUpperCase() }}</strong></p>
+  <p>Nombre de lettres dans le nom : <strong>{{ targetGame.name.length }}</strong></p>
+  </div>
+
+
+
 
     <div class="attempts-list">
         <!-- Ligne d'en-têtes -->
@@ -28,6 +37,11 @@
           {{ property.name }}
         </div>
       </div>
+
+      <div v-if="gameWon" class="win-message">
+    Félicitations ! Vous avez trouvé le jeu en {{ attempts.length }} essais !
+      </div>
+
       <div v-for="(attempt, index) in attempts" :key="index" class="attempt">
         <div class="game-name"><strong>{{ attempt.Nom_Jeu }}</strong></div>
         <div class="game-properties">
@@ -58,9 +72,7 @@
       </div>
     </div>
 
-    <div v-if="gameWon" class="win-message">
-      Félicitations ! Vous avez trouvé le jeu en {{ attempts.length }} essais !
-    </div>
+
 
     <div class="instructions">
   <h3>Comment interpréter les indices :</h3>
@@ -84,6 +96,7 @@ export default {
       targetGame: null,
       attempts: [],
       gameWon: false,
+      showHint: false,
       comparableProperties: {
         Catégories: { type: 'array', name: 'Catégories' },
         Min_Joueurs: { type: 'numeric', name: 'Joueurs min' },
@@ -157,7 +170,7 @@ export default {
         : game.Catégories.split(', ')
       : [];
 
-    this.attempts.push(game);
+    this.attempts.unshift(game);
 
     if (game.Nom_Jeu === this.targetGame.Nom_Jeu) {
       this.gameWon = true;
@@ -416,5 +429,18 @@ input {
   color: white;
   margin: 10px;
 }
+
+
+.hint-box {
+  margin-top: 20px;
+  background-color: rgba(255,255,255,0.85);  
+  padding: 15px;
+  margin: 15px;
+  border-radius: 8px;
+  font-style: italic;
+  color: #333;
+
+}
+
 
 </style>
