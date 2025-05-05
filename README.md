@@ -65,10 +65,11 @@ L'application devrait se lancer sur `http://localhost:8080`
 ---
 
 ## Fonctionnalités
-- Page d'accueil (à peaufiner)
-- Page de jeu (logique de jeu non implémentée)
-- Page "À propos" (toujours aucun style)
-- Connexion administrateur (à venir)
+- Page d'accueil 
+- Page de jeu 
+- Page "À propos" (Liste des jeux)
+- Connexion administrateur
+  
 
 ---
 
