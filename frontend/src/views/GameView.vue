@@ -5,7 +5,7 @@
       <div class="game-info-container">
         <h2>Devinez le jeu de société du jour !</h2>
         <div v-if="targetGame" class="target-info">
-        Jeu aléatoire chargé : {{ targetGame.name }} (debug)
+        <!--Jeu aléatoire chargé : {{ targetGame.name }} (debug)-->
         </div>
       </div>
     </div>
@@ -82,16 +82,34 @@
     <li><span class="box correct">🟩</span> → Cet attribut correspond exactement au jeu recherché.</li>
     <li><span class="arrow">↑</span> → La valeur proposée est plus petite que celle du jeu recherché.</li>
     <li><span class="arrow">↓</span> → La valeur proposée est plus grande que celle du jeu recherché.</li>
+    <li><span class="box">🤖</span> → L'assistant est là pour t'aider à connaître la description des jeux.</li>
   </ul>
 </div>
 
   </div>
+<!-- Chatbot flottant -->
+<transition name="fade">
+  <div v-if="showChatbot" class="chatbot-float">
+    <ChatBot />
+  </div>
+</transition>
+
+<!-- Bouton flottant d'ouverture -->
+<button v-if="!showChatbot" class="chat-toggle-button" @click="showChatbot = true">
+  🤖
+</button>
 </template>
 
 <script>
+import ChatBot from '@/components/ChatBot.vue';
+
 export default {
+  components: {
+    ChatBot,
+  },
   data() {
     return {
+      showChatbot: false,
       currentGuess: '',
       targetGame: null,
       attempts: [],
@@ -441,6 +459,70 @@ input {
   color: #333;
 
 }
+
+.chat-toggle-button {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  width: 60px;
+  height: 60px;
+  background-color: #0077cc;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  font-size: 1.8em;
+  cursor: pointer;
+  z-index: 1000;
+  transition: background-color 0.3s ease;
+}
+
+.chat-toggle-button:hover {
+  background-color: #005fa3;
+}
+
+.chatbot-float {
+  position: fixed;
+  bottom: 100px;
+  right: 25px;
+  width: 350px;
+  max-height: 500px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+}
+
+.chatbot-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #0077cc;
+  color: white;
+  padding: 10px;
+  font-weight: bold;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.2em;
+  cursor: pointer;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+
 
 
 </style>

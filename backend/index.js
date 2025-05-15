@@ -159,6 +159,16 @@ app.put('/users/update-role', (req, res) => {
     res.json({ message: 'Rôle mis à jour avec succès' });
   });
 });
+
+//Delete User
+app.delete('/users/delete/:username', (req, res) => {
+  const username = req.params.username;
+  const sql = `CALL delete_user(?)`;
+  db.query(sql, [username], (err) => {
+    if (err) return res.status(500).json({ error: 'Erreur MySQL: ' + err.message });
+    res.json({ message: 'Utilisateur supprimé avec succès' });
+  });
+});
 //-----------------------------------------------------------------------------------------------------------
 // A-propos 
 // Tous les jeux (via la vue GameDetails)
@@ -191,10 +201,21 @@ app.get('/search', (req, res) => {
     const query = `CALL search_game(?)`;
     db.query(query, [gameName], (err, results) => {
       if (err) return res.status(500).json({ error: err.message });
-      // Résultat de procédure stockée = tableau avec 1er élément : résultats de SELECT
       res.json(results[0]);
     });
   });  
+
+//Pour le bot 
+app.get('/search-bot', (req, res) => {
+    const gameName = req.query.name;
+    if (!gameName) {
+      return res.status(400).json({ error: 'Le nom du jeu est requis dans le paramètre ?name=' });}
+    const query = `CALL search_game_bot(?)`;
+    db.query(query, [gameName], (err, results) => {
+      if (err) return res.status(500).json({ error: err.message });
+      res.json(results[0]);
+    });
+  }); 
 
 // Jeu aléatoire (via procédure)
 app.get('/random-game', (req, res) => {

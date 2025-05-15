@@ -1,0 +1,36 @@
+{
+    "intents": [
+      {
+        "tag": "greet",
+        "patterns": ["Bonjour", "Salut", "Coucou","Yo"],
+        "responses": ["Bonjour ! Comment puis-je vous aider ?"]
+      },
+      {
+        "tag": "goodbye",
+        "patterns": ["Au revoir", "À bientôt", "À la prochaine"],
+        "responses": ["À bientôt ! N'hésitez pas si vous avez d'autres questions."]
+      },
+      {
+        "tag": "thanks",
+        "patterns": ["Merci", "Merci beaucoup", "Merci pour votre aide"],
+        "responses": ["De rien ! C'est un plaisir de vous aider."]
+      },
+      {
+        "tag": "cheat",
+        "patterns": ["Dur", "arrive pas", "tricher","aide"],
+        "responses": ["Si tu veux la reponse, je peux te la donner ! Mais je te conseille de jouer le jeu et de deviner par toi-même. C'est plus amusant ! Il suffit de demander le jeu du jour !"]
+      },
+      {
+        "tag": "regles",
+        "patterns": ["règle", "règles", "jouer", "fonctionne", "comment"],
+        "responses": ["Bienvenue sur le projet Gamedle, un jeu en ligne inspiré de Wordle ou LoLdle (selon votre référence), mais pour les jeux de société ! Testez vos connaissances en devinant un jeu à partir de ses caractéristiques."]
+      },
+      {
+        "tag": "jeu_du_jour",
+        "patterns": ["jeu du jour", "donne moi le jeu", "la réponse", "la reponse", "le jeu", "solution"],
+        "responses": ["__API_CALL__/game-of-the-day"]
+    }
+      
+    ]
+  }
+  
