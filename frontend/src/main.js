@@ -7,7 +7,7 @@ const app = createApp(App);
 
 //const PORT = process.env.PORT;
 
-app.config.globalProperties.$apiBase = `http://localhost:3000`;
+app.config.globalProperties.$apiBase = `http://localhost:8000`;
 
 app.use(router);
 app.mount('#app');
