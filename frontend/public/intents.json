@@ -17,12 +17,12 @@
       },
       {
         "tag": "cheat",
-        "patterns": ["Dur", "arrive pas", "tricher","aide"],
+        "patterns": ["Dur", "arrive pas", "tricher","aide", "compliquer", "difficile", "trop dur", "trop compliqué", "je ne sais pas"],
         "responses": ["Si tu veux la reponse, je peux te la donner ! Mais je te conseille de jouer le jeu et de deviner par toi-même. C'est plus amusant ! Il suffit de demander le jeu du jour !"]
       },
       {
         "tag": "regles",
-        "patterns": ["règle", "règles", "jouer", "fonctionne", "comment"],
+        "patterns": ["règle", "règles", "jouer", "fonctionne", "comment","regle","regles"],
         "responses": ["Bienvenue sur le projet Gamedle, un jeu en ligne inspiré de Wordle ou LoLdle (selon votre référence), mais pour les jeux de société ! Testez vos connaissances en devinant un jeu à partir de ses caractéristiques."]
       },
       {
@@ -30,7 +30,6 @@
         "patterns": ["jeu du jour", "donne moi le jeu", "la réponse", "la reponse", "le jeu", "solution"],
         "responses": ["__API_CALL__/game-of-the-day"]
     }
-      
     ]
   }
   

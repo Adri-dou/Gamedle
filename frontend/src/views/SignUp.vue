@@ -85,10 +85,7 @@ select {
   transition: border-color 0.2s;
 }
 
-input:focus,
-select:focus {
-  background-color: #e74c3c;
-}
+
 
 button {
   padding: 12px;
