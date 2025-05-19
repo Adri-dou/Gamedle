@@ -30,8 +30,7 @@ group by g.game_id, g.name, g.description;
 
 select * from Game_Description;
 --
-drop view GameOfTheDay;
-CREATE VIEW View_GameOfTheDay AS
+CREATE OR REPLACE VIEW View_GameOfTheDay AS
 SELECT
     go.date,
     g.game_id,
@@ -42,6 +41,7 @@ SELECT
     g.ranking,
     g.yearPublished,
     g.playingTime,
+    g.description,
     p.name AS publisher,
     
     -- Catégories sous forme de chaîne : "Stratégie, Aventure"
@@ -51,12 +51,10 @@ SELECT
       WHERE ic.game_id = g.game_id
     ) AS Catégories
 
-
 FROM GameOfTheDay go
 JOIN Game g ON g.game_id = go.game_id
 LEFT JOIN Publisher p ON p.publisher_id = g.publisher_id;
 
-select * from View_GameOfTheDay;
 --
 CREATE VIEW UserList AS
 SELECT username, user_role
@@ -182,6 +180,17 @@ call search_game('catan') ;
 --
 
 DELIMITER //
+CREATE PROCEDURE search_game_bot(IN gameName VARCHAR(500))
+BEGIN
+    SELECT name, description 
+    FROM Game 
+    WHERE name LIKE CONCAT('%', gameName, '%');
+END; //
+DELIMITER ;
+call search_game_bot('catan') ;
+--
+
+DELIMITER //
 create procedure delete_game(id int)
 begin
 	DELETE FROM GameOfTheDay WHERE game_id = id;
@@ -204,3 +213,16 @@ BEGIN
 END;
 //
 DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE delete_user(name VARCHAR(500))
+BEGIN 
+	DELETE FROM User_game WHERE username = name;
+END
+// DELIMITER 
+
+call delete_user('proventus');
+
+select * from user_game
+
+select * from game;
